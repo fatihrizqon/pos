@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Stock;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class StockController extends Controller
@@ -30,7 +31,6 @@ class StockController extends Controller
             $stock = new stock();
             $stock->product_id = $request->product_id;
             $stock->quantity = $request->quantity;
-            $stock->user_id = $request->user_id;
             if($stock->save()){
                 return response()->json([
                     'success' => true,
@@ -76,6 +76,7 @@ class StockController extends Controller
                 'data'    => ''
             ], 404);
         }
+        
         return response()->json([
             'success' => true,
             'message' => "The stock has been updated.",

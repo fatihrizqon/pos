@@ -13,7 +13,7 @@ class AppController extends Controller
     {
         return response()->json([
             'success' => true,
-            'message' => "Index of API"
+            'message' => "Index of App"
         ], 200);
     }
 }

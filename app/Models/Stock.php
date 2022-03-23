@@ -1,8 +1,7 @@
 <?php
 
 namespace App\Models;
-use App\Models\User;
-use App\Models\Payment;
+use App\Models\Supply;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,7 +11,7 @@ class Stock extends Model
     use HasFactory;
 
     protected $fillable = [
-      'product_id','quantity','user_id'
+      'product_id','quantity'
     ];
 
     public function products()
@@ -20,9 +19,9 @@ class Stock extends Model
       return $this->hasMany(Product::class);
     }
 
-    public function user()
+    public function supply()
     {
-      return $this->belongsTo(User::class);
+      return $this->hasMany(Supply::class);
     }
-    
+  
 }

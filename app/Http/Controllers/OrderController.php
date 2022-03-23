@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\Stock;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -30,12 +32,23 @@ class OrderController extends Controller
             $order = new Order();
             $order->product_id = $request->product_id;
             $order->quantity = $request->quantity;
-            if($order->save()){
+
+            $stock = Stock::where('product_id', $request->product_id)->get()->first();
+            if($stock->quantity >= $request->quantity){
+                $stock->quantity = $stock->quantity - $request->quantity;
+                if($stock->save()){
+                    $order->save();
+                    return response()->json([
+                        'success' => true,
+                        'message' => "A New Order has been created.",
+                        'data'    => $order
+                    ], 200);
+                }
+            }else{
                 return response()->json([
-                    'success' => true,
-                    'message' => "A new order has been added.",
-                    'data'    => $order
-                ], 200);
+                    'success' => false,
+                    'message' => "Insuficcient Stocks."
+                ], 403);
             }
         } catch(\Exception $e){
             return response()->json([
@@ -57,7 +70,7 @@ class OrderController extends Controller
         }
         return response()->json([
             'success' => true,
-            'message' => "Get a orders.",
+            'message' => "Get an orders.",
             'data'    => $order
         ], 200);
     }

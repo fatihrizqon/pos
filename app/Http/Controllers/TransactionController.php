@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Stock;
+use App\Models\Order;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 
@@ -32,6 +34,17 @@ class TransactionController extends Controller
             $transaction->total_price = $request->total_price;
             $transaction->user_id = $request->user_id;
             if($transaction->save()){
+                $order = Order::find($request->order_id);
+                $stock = Stock::where('product_id', $order->product_id)->get()->first();
+                $stock->quantity = $stock->quantity - $order->quantity;
+                if(!$stock->save()){
+                    return response()->json([
+                        'success' => false,
+                        'message' => "Failed to update the stock, please try again.",
+                        'data'    => ''
+                    ], 404);
+                }
+
                 return response()->json([
                     'success' => true,
                     'message' => "A new transaction has been added.",

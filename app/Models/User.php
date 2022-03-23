@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-use App\Models\Stock;
+use App\Models\Supply;
 use App\Models\Transaction;
 
 use Illuminate\Auth\Authenticatable;
@@ -23,9 +23,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'password',
     ];
 
-    public function stocks()
+    public function supplies()
     {
-      return $this->hasMany(Stock::class);
+      return $this->hasMany(Supply::class);
     }
 
     public function transactions()

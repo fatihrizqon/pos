@@ -17,11 +17,11 @@ class Transaction extends Model
 
     public function orders()
     {
-      return $this->hasMany(Order::class);
+      return $this->hasMany(Order::class, 'order_id');
     }
 
     public function user()
     {
-      return $this->belongsTo(User::class);
+      return $this->belongsTo(User::class, 'user_id');
     }
 }
