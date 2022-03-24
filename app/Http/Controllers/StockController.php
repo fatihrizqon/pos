@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Stock;
-use App\Models\Product;
 use Illuminate\Http\Request;
 
 class StockController extends Controller
@@ -28,7 +27,7 @@ class StockController extends Controller
     public function create(Request $request)
     {
         try{
-            $stock = new stock();
+            $stock = new Stock();
             $stock->product_id = $request->product_id;
             $stock->quantity = $request->quantity;
             if($stock->save()){

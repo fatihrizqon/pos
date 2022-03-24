@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('order_id')->references('id')->on('orders')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('total_price');
             $table->foreignId('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->integer('status')->default(0);
             $table->timestamps();
         });
     }

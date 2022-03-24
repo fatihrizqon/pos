@@ -29,10 +29,13 @@ class OrderController extends Controller
     public function create(Request $request)
     {
         try{
+            $product = Product::where('id', $request->product_id)->get()->first();
+            
             $order = new Order();
             $order->product_id = $request->product_id;
             $order->quantity = $request->quantity;
-
+            $order->price = $product->sell * $request->quantity;
+            
             $stock = Stock::where('product_id', $request->product_id)->get()->first();
             if($stock->quantity >= $request->quantity){
                 $stock->quantity = $stock->quantity - $request->quantity;

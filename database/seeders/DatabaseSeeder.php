@@ -18,65 +18,100 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         ProductCategory::create([
-            'name'       => 'Supercar'
+            'name'       => 'Appetizer'
         ]);
 
         ProductCategory::create([
-            'name'       => 'Sportcar'
+            'name'       => 'Main Course'
+        ]);
+
+        ProductCategory::create([
+            'name'       => 'Snacks'
+        ]);
+
+        ProductCategory::create([
+            'name'       => 'Dessert'
+        ]);
+
+        ProductCategory::create([
+            'name'       => 'Drinks'
         ]);
 
         Product::create([
-            'name' => '2015 Ferrari FXX K',
-            'price' => 3400000,
+            'name' => 'Dim Sum',
+            'purchase'=> 10000,
+            'sell'=> 20000,
             'category_id' => 1,
         ]);
 
         Product::create([
-            'name' => 'Lamborghini Veneno Roadster',
-            'price' => 4500000,
+            'name' => 'Sushi',
+            'purchase'=> 50000,
+            'sell'=> 250000,
+            'category_id' => 2,
+        ]);
+
+        Product::create([
+            'name' => 'Seafood Ramen',
+            'purchase'=> 25000,
+            'sell'=> 100000,
+            'category_id' => 2,
+        ]);
+
+        Product::create([
+            'name' => 'Salad',
+            'purchase'=> 25000,
+            'sell'=> 75000,
             'category_id' => 1,
         ]);
 
         Product::create([
-            'name' => 'Lamborghini Sesto Elemento',
-            'price' => 2200000,
-            'category_id' => 1,
+            'name' => 'Potato Fries',
+            'purchase'=> 20000,
+            'sell'=> 45000,
+            'category_id' => 3,
         ]);
 
         Product::create([
-            'name' => '2013 Bugatti Veyron Grand Sport Vitesse',
-            'price' => 2600000,
-            'category_id' => 1,
-        ]);
-
-        Product::create([
-            'name' => 'BMW M2',
-            'price' => 58000,
+            'name' => 'Tuna with Salad',
+            'purchase'=> 50000,
+            'sell'=> 250000,
             'category_id' => 2,
         ]);
 
         Product::create([
-            'name' => 'BMW X5',
-            'price' => 82000,
+            'name' => 'Pasta',
+            'purchase'=> 50000,
+            'sell'=> 150000,
             'category_id' => 2,
         ]);
 
         Product::create([
-            'name' => 'BMW 3 Series',
-            'price' => 56000,
-            'category_id' => 2,
+            'name' => 'Red Velvet Cake',
+            'purchase'=> 40000,
+            'sell'=> 120000,
+            'category_id' => 3,
         ]);
 
         Product::create([
-            'name' => 'BMW 4 Series',
-            'price' => 58000,
-            'category_id' => 2,
+            'name' => 'Raspberry Pudding',
+            'purchase'=> 50000,
+            'sell'=> 125000,
+            'category_id' => 4,
         ]);
 
         Product::create([
-            'name' => 'BMW 8 Series',
-            'price' => 121000,
-            'category_id' => 2,
+            'name' => 'Mineral Water',
+            'purchase'=> 5000,
+            'sell'=> 15000,
+            'category_id' => 5,
+        ]);
+
+        Product::create([
+            'name' => 'Juice',
+            'purchase'=> 25000,
+            'sell'=> 30000,
+            'category_id' => 5,
         ]);
 
         User::factory(5)->create();

@@ -3,6 +3,12 @@
 $router->get('/', 'AppController@index');
 
 $router->group(['prefix' => 'api'], function() use ($router){
+    $router->get('/categories', 'ProductCategoryController@index');
+    $router->post('/category/create', 'ProductCategoryController@create');
+    $router->get('/category/view/{id}', 'ProductCategoryController@view');
+    $router->put('/category/update/{id}', 'ProductCategoryController@update');
+    $router->delete('/category/delete/{id}', 'ProductCategoryController@delete');
+
     $router->get('/products', 'ProductController@index');
     $router->post('/product/create', 'ProductController@create');
     $router->get('/product/view/{id}', 'ProductController@view');
@@ -31,6 +37,28 @@ $router->group(['prefix' => 'api'], function() use ($router){
     $router->post('/supply/create', 'SupplyController@create');
     $router->get('/supply/view/{id}', 'SupplyController@view');
     // $router->put('/supply/update/{id}', 'SupplyController@update');
-    $router->delete('/supply/delete/{id}', 'SupplyController@delete');
- 
+    // $router->delete('/supply/delete/{id}', 'SupplyController@delete');
+
 });
+
+/*
+    -> Setiap Transaction & Supply Baru, masuk ke notifikasi email manajer.
+    -> Ketika ada Stock Product 0, masuk ke notifikasi email manajer.
+    *Bisa mute.
+*/
+
+/*
+    Algoritma penjualan:
+    1. Create a New Transaction (ID).
+    2. Create a New Transaction, 1 Transaction many Orders.
+    3. 
+    ------------------------------------------------------------------
+    1. Klik New Order.
+    2. Insert Product & Quantity => New Order
+    3. Klik Check Out => Mengumpulkan semua order jadi 1, menghitung total_price
+    4. Klik Pay => New Transaction
+*/
+
+/*
+
+*/
