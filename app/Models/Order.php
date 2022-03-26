@@ -14,11 +14,11 @@ class Order extends Model
 
     public function products()
     {
-      return $this->hasMany(Product::class, 'product_id');
+      return $this->hasMany(Product::class);
     }
 
     public function transaction()
     {
-      return $this->belongsTo(Transaction::class, 'transaction_id');
+      return $this->belongsTo(Transaction::class);
     }
 }

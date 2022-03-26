@@ -13,9 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id')->references('id')->on('orders')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('order_code')->references('code')->on('orders')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('total_price');
             $table->foreignId('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('status')->default(0);

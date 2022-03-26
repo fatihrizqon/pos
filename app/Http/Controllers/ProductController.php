@@ -9,7 +9,14 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::get();
+        $products = Product::join('stocks','stocks.product_id', '=', 'products.id')
+                    ->join('supplies', 'supplies.stock_id', '=', 'stocks.id')
+                    ->join('suppliers', 'suppliers.id', '=', 'supplies.stock_id')
+                    ->select('products.*', 'suppliers.name as supplier', 'stocks.quantity as stocks')
+                    ->get();
+
+        // $products = Product::get();
+
         if(!$products){
             return response()->json([
                 'success' => false,

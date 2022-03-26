@@ -10,7 +10,8 @@ class ProductCategoryController extends Controller
 {
     public function index()
     {
-        $product_categories = ProductCategory::get();
+        $product_categories = ProductCategory::withCount(['products as products'])->get();
+
         if(!$product_categories){
             return response()->json([
                 'success' => false,

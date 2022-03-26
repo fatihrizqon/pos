@@ -1,8 +1,10 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 $router->get('/', 'AppController@index');
 
-$router->group(['prefix' => 'api'], function() use ($router){
+$router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('/categories', 'ProductCategoryController@index');
     $router->post('/category/create', 'ProductCategoryController@create');
     $router->get('/category/view/{id}', 'ProductCategoryController@view');
