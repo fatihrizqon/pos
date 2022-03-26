@@ -12,7 +12,7 @@ class SupplyFactory extends Factory
     public function definition(): array
     {
     	return [
-            'stock_id' => $this->faker->numberBetween(1,9),
+            'product_id' => $this->faker->numberBetween(1,11),
             'quantity' => $this->faker->numberBetween(5, 25),
             'user_id' => $this->faker->numberBetween(1,9),
             'supplier_id' => $this->faker->numberBetween(1,9)

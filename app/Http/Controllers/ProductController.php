@@ -10,9 +10,10 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::join('stocks','stocks.product_id', '=', 'products.id')
-                    ->join('supplies', 'supplies.stock_id', '=', 'stocks.id')
-                    ->join('suppliers', 'suppliers.id', '=', 'supplies.stock_id')
-                    ->select('products.*', 'suppliers.name as supplier', 'stocks.quantity as stocks')
+                    ->join('supplies', 'supplies.product_id', '=', 'products.id')
+                    ->join('suppliers', 'suppliers.id', '=', 'supplies.supplier_id')
+                    ->join('product_categories', 'product_categories.id', '=', 'products.category_id')
+                    ->select('products.*', 'suppliers.name as supplier', 'product_categories.name as category', 'stocks.quantity as stocks')
                     ->get();
 
         // $products = Product::get();

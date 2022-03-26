@@ -35,11 +35,12 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->put('/transaction/update/{id}', 'TransactionController@update');
     $router->delete('/transaction/delete/{id}', 'TransactionController@delete');
     
-    $router->get('/supplies', 'SupplyController@index');
-    $router->post('/supply/create', 'SupplyController@create');
-    $router->get('/supply/view/{id}', 'SupplyController@view');
-    // $router->put('/supply/update/{id}', 'SupplyController@update');
-    // $router->delete('/supply/delete/{id}', 'SupplyController@delete');
+    /* Purchases */
+    $router->get('/purchases', 'SupplyController@index');
+    $router->post('/purchase/create', 'SupplyController@create');
+    $router->get('/purchase/view/{id}', 'SupplyController@view');
+    $router->put('/purchase/update/{id}', 'SupplyController@update');
+    $router->delete('/purchase/delete/{id}', 'SupplyController@delete');
 
 });
 

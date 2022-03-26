@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('supplies', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('stock_id')->references('id')->on('stocks')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('product_id')->references('id')->on('products')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('quantity');
             $table->foreignId('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('supplier_id')->references('id')->on('suppliers')->onUpdate('cascade')->onDelete('cascade');
