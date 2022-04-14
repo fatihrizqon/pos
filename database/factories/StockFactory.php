@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Stock;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class StockFactory extends Factory
@@ -12,7 +13,7 @@ class StockFactory extends Factory
     public function definition(): array
     {
     	return [
-            'product_id' => $this->faker->unique()->numberBetween(1, 9),
+            'product_id' => Product::orderBy('id')->first()->id,
             'quantity' => $this->faker->numberBetween(5, 125),
     	];
     }

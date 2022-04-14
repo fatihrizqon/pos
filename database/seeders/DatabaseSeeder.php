@@ -138,5 +138,9 @@ class DatabaseSeeder extends Seeder
 
         Stock::factory(9)->create();
 
+        Order::factory(9)->create();
+        
+        Transaction::factory(9)->create();
+
     }
 }

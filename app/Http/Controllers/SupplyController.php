@@ -15,7 +15,7 @@ class SupplyController extends Controller
                             ->join('stocks','stocks.product_id', '=', 'products.id')
                             ->join('suppliers','supplies.supplier_id','=','suppliers.id')
                             ->join('users','supplies.user_id','=','users.id')
-                            ->select('supplies.id', 'products.name as product', 'products.purchase as purchase', 'supplies.quantity as quantity', 'users.fullname as stocker', 'suppliers.name as supplier')
+                            ->select('supplies.id', 'products.name as product', 'products.purchase as purchase', 'supplies.quantity as quantity', 'users.fullname as stocker', 'suppliers.name as supplier', 'supplies.created_at as date', 'supplies.updated_at as update')
                             ->get();
 
         if(!$purchases){
@@ -111,19 +111,22 @@ class SupplyController extends Controller
 
     public function delete($id)
     {
+        $purchase = Supply::find($id);
+        $product = Product::where('id', $purchase->product_id)->get()->first();
+        $stock = Stock::where('product_id', $product->id)->get()->first();
+        $oldstock = $stock->quantity - $purchase->quantity;
+        $stock->quantity = $oldstock;
         $purchase = Supply::find($id)->delete();
 
-        if(!$purchase){
+        if($purchase && $stock->save()){
             return response()->json([
-                'success' => false,
-                'message' => "Failed to delete selected Purchase.",
-                'data'    => ''
-            ], 404);
+                'success' => true,
+                'message' => "Selected Purchase has been deleted.",
+            ], 200);
         }
         return response()->json([
-            'success' => true,
-            'message' => "Selected Purchase has been deleted.",
-            'data'    => $purchase
-        ], 200);
+            'success' => false,
+            'message' => "Failed to delete selected Purchase.",
+        ], 404);
     }
 }

@@ -30,7 +30,7 @@ class TransactionController extends Controller
     {
         try{
             $transaction = new Transaction();
-            $transaction->order_id = $request->order_id;
+            $transaction->order_code = $request->order_code;
             $transaction->total_price = $request->total_price;
             $transaction->user_id = $request->user_id;
             if($transaction->save()){
