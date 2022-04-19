@@ -10,19 +10,19 @@ class SupplierController extends Controller
 {
     public function index()
     {
-        $supplies = Supplier::get();
-        if(!$supplies){
+        $suppliers = Supplier::get();
+        if($suppliers){
             return response()->json([
-                'success' => false,
-                'message' => "Failed to get The Suppliers.",
-                'data'    => ''
-            ], 404);
+                'success' => true,
+                'message' => "All Suppliers has been loaded.",
+                'data'    => $suppliers
+            ], 200);
         }
         return response()->json([
-            'success' => true,
-            'message' => "Get all supplies.",
-            'data'    => $supplies
-        ], 200);
+            'success' => false,
+            'message' => "Failed to load the Suppliers.",
+            'data'    => ''
+        ], 404);
     }
 
     public function create(Request $request)
@@ -38,15 +38,14 @@ class SupplierController extends Controller
                 $supplier->save();
                 return response()->json([
                     'success' => true,
-                    'message' => "A New Supplier has been added.",
+                    'message' => "A New Supplier has been created.",
                     'data'    => $supplier
                 ], 200);
-            }else{
-                return response()->json([
-                    'success' => true,
-                    'message' => "A New Supplier can't be added.",
-                ], 403);
             }
+            return response()->json([
+                'success' => false,
+                'message' => "An error has been occured."
+            ], 404);
         } catch(\Exception $e){
             return response()->json([
                 'success' => false,
@@ -59,18 +58,18 @@ class SupplierController extends Controller
     {
         $supplier = Supplier::find($id);
 
-        if(!$supplier){
+        if($supplier){
             return response()->json([
-                'success' => false,
-                'message' => "Failed to get The Supplier.",
-                'data'    => ''
-            ], 404);
+                'success' => true,
+                'message' => "Selected Supplier has been loaded.",
+                'data'    => $supplier
+            ], 200);
         }
         return response()->json([
-            'success' => true,
-            'message' => "Get a Supplier.",
-            'data'    => $supplier
-        ], 200);
+            'success' => false,
+            'message' => "Failed to get The Supplier.",
+            'data'    => ''
+        ], 404);
     }
 
     public function update(Request $request, $id)
@@ -78,36 +77,32 @@ class SupplierController extends Controller
         $supplier = Supplier::find($id);
         $supplier->quantity = $request->quantity;
 
-        if(!$supplier->save()){
+        if($supplier->save()){
             return response()->json([
-                'success' => false,
-                'message' => "Failed to get update The Supplier.",
-                'data'    => ''
-            ], 404);
+                'success' => true,
+                'message' => "The Supplier has been updated.",
+                'data'    => $supplier
+            ], 200);
         }
-        
         return response()->json([
-            'success' => true,
-            'message' => "The Supplier has been updated.",
-            'data'    => $supplier
-        ], 200);
+            'success' => false,
+            'message' => "Failed to get update The Supplier." 
+        ], 404); 
     }
 
     public function delete($id)
     {
         $supplier = Supplier::find($id)->delete();
 
-        if(!$supplier){
+        if($supplier){
             return response()->json([
-                'success' => false,
-                'message' => "Failed to delete The Supplier.",
-                'data'    => ''
-            ], 404);
+                'success' => true,
+                'message' => "A Supplier has been deleted." 
+            ], 200);
         }
         return response()->json([
-            'success' => true,
-            'message' => "A Supplier has been deleted.",
-            'data'    => $supplier
-        ], 200);
+            'success' => false,
+            'message' => "Failed to delete The Supplier."  
+        ], 404);
     }
 }

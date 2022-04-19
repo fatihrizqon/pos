@@ -16,9 +16,10 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->references('id')->on('products')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('product_name');
             $table->integer('quantity');
             $table->integer('price');
-            $table->string('code')->unique()->index();
+            $table->string('code');
             $table->timestamps();
         });
     }

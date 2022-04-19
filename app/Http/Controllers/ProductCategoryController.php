@@ -12,18 +12,18 @@ class ProductCategoryController extends Controller
     {
         $product_categories = ProductCategory::withCount(['products as products'])->get();
 
-        if(!$product_categories){
+        if($product_categories){
             return response()->json([
-                'success' => false,
-                'message' => "Failed to get the product categories.",
-                'data'    => ''
-            ], 404);
+                'success' => true,
+                'message' => "All Categories has been loaded.",
+                'data'    => $product_categories
+            ], 200);
         }
         return response()->json([
-            'success' => true,
-            'message' => "Get all product categories.",
-            'data'    => $product_categories
-        ], 200);
+            'success' => false,
+            'message' => "Failed to load Categories.",
+            'data'    => ''
+        ], 404);
     }
 
     public function create(Request $request)
@@ -31,13 +31,17 @@ class ProductCategoryController extends Controller
         try{
             $product_category = new ProductCategory();
             $product_category->name = $request->name;
-            if($product_category->save()){
+            if($product_category->save()){ 
                 return response()->json([
                     'success' => true,
-                    'message' => "A new product category has been added.",
+                    'message' => "A New Category has been created.",
                     'data'    => $product_category
                 ], 200);
             }
+            return response()->json([
+                'success' => false,
+                'message' => "An error has been occured.",
+            ], 404);
         } catch(\Exception $e){
             return response()->json([
                 'success' => false,
@@ -49,54 +53,51 @@ class ProductCategoryController extends Controller
     public function view($id)
     {
         $product_category = ProductCategory::where('id',$id)->get();
-        if(!$product_category){
+        if($product_category){
             return response()->json([
-                'success' => false,
-                'message' => "Failed to get the product category.",
-                'data'    => ''
-            ], 404);
+                'success' => true,
+                'message' => "Selected Category has been loaded.",
+                'data'    => $product_category
+            ], 200);
         }
         return response()->json([
-            'success' => true,
-            'message' => "Get a product category.",
-            'data'    => $product_category
-        ], 200);
+            'success' => false,
+            'message' => "Failed to get selected Category.",
+            'data'    => ''
+        ], 404);
     }
 
     public function update(Request $request, $id)
     {
         $product_category = ProductCategory::find($id);
-        $product_category->quantity = $request->quantity;
+        $product_category->name = $request->name;
 
-        if(!$product_category->save()){
+        if($product_category->save()){
             return response()->json([
-                'success' => false,
-                'message' => "Failed to get update the product category.",
-                'data'    => ''
-            ], 404);
+                'success' => true,
+                'message' => "Selected Category has been updated.",
+                'data'    => $product_category
+            ], 200);
         }
         return response()->json([
-            'success' => true,
-            'message' => "The product category has been updated.",
-            'data'    => $product_category
-        ], 200);
+            'success' => false,
+            'message' => "Failed to update selected Category." 
+        ], 404);
     }
 
     public function delete($id)
     {
         $product_category = ProductCategory::find($id)->delete();
 
-        if(!$product_category){
+        if($product_category){
             return response()->json([
-                'success' => false,
-                'message' => "Failed to delete the product category.",
-                'data'    => ''
-            ], 404);
+                'success' => true,
+                'message' => "Selected Category has been deleted."
+            ], 200);
         }
         return response()->json([
-            'success' => true,
-            'message' => "A product category has been deleted.",
-            'data'    => $product_category
-        ], 200);
+            'success' => false,
+            'message' => "Failed to delete selected Category." 
+        ], 404);
     }
 }

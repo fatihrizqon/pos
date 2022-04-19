@@ -12,6 +12,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->delete('/category/delete/{id}', 'ProductCategoryController@delete');
 
     $router->get('/products', 'ProductController@index');
+    $router->get('/allproducts', 'ProductController@allproducts');
     $router->post('/product/create', 'ProductController@create');
     $router->get('/product/view/{id}', 'ProductController@view');
     $router->put('/product/update/{id}', 'ProductController@update');
@@ -35,12 +36,17 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->put('/transaction/update/{id}', 'TransactionController@update');
     $router->delete('/transaction/delete/{id}', 'TransactionController@delete');
     
-    /* Purchases */
-    $router->get('/purchases', 'SupplyController@index');
-    $router->post('/purchase/create', 'SupplyController@create');
-    $router->get('/purchase/view/{id}', 'SupplyController@view');
-    $router->put('/purchase/update/{id}', 'SupplyController@update');
-    $router->delete('/purchase/delete/{id}', 'SupplyController@delete');
+    $router->get('/supplies', 'SupplyController@index');
+    $router->post('/supply/create', 'SupplyController@create');
+    $router->get('/supply/view/{id}', 'SupplyController@view');
+    $router->put('/supply/update/{id}', 'SupplyController@update');
+    $router->delete('/supply/delete/{id}', 'SupplyController@delete');
+
+    $router->get('/suppliers', 'SupplierController@index');
+    $router->post('/supplier/create', 'SupplierController@create');
+    $router->get('/supplier/view/{id}', 'SupplierController@view');
+    $router->put('/supplier/update/{id}', 'SupplierController@update');
+    $router->delete('/supplier/delete/{id}', 'SupplierController@delete');
 
 });
 

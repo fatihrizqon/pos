@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('code')->unique();
             $table->integer('purchase');
             $table->integer('sell');
+            $table->integer('stocks');
             $table->foreignId('category_id')->references('id')->on('product_categories')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });

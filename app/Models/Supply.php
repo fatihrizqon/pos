@@ -2,7 +2,6 @@
 
 namespace App\Models;
 use App\Models\User;
-use App\Models\Stock;
 use App\Models\Supplier;
 
 use Illuminate\Database\Eloquent\Model;
@@ -21,10 +20,6 @@ class Supply extends Model
       return $this->belongsTo(User::class);
     }
 
-    public function stock()
-    {
-      return $this->belongsTo(Stock::class);
-    }
     public function supplier()
     {
       return $this->belongsTo(Supplier::class);
