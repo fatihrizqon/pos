@@ -35,14 +35,13 @@ class OrderController extends Controller
             $order->quantity = $request->quantity;
             $order->price = $request->price;
             $order->code = $request->code;
-            $product->stocks = $product->stocks - $order->quantity;
-
-            if($request->quantity > $product->stocks){ 
+            if($request->quantity > $product->stocks){        
                 return response()->json([
                     'success' => false,
                     'message' => "Insuficcient Stocks."
                 ], 403);
             }else{
+                $product->stocks = $product->stocks - $order->quantity;
                 if($order->save() && $product->save()){ 
                     return response()->json([
                         'success' => true,
