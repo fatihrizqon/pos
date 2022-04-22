@@ -42,6 +42,16 @@ class DatabaseSeeder extends Seeder
             'name'       => 'Drinks'
         ]);
 
+        User::create([
+            'id' => 1,
+            'username' => 'misha',
+            'fullname' => 'Misha Anastashya',
+            'email' => 'misha@mail.id',
+            'password' => 'misha',
+            'phone' => '082145556225',
+            'role' => 5
+        ]);
+
         // Product::create([
         //     'name' => 'Dim Sum',
         //     'code' => $faker->regexify('[A-Z]{5}[0-4]{3}'),
