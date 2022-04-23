@@ -8,6 +8,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     
     $router->post('/auth/register', 'AuthController@register');
     $router->post('/auth/login', 'AuthController@login');
+    $router->get('/auth/logout', 'AuthController@logout');
 
     // Authorized Routes
     $router->group(['middleware' => 'auth'], function () use($router){

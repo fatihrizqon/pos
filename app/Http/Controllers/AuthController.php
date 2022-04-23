@@ -8,7 +8,8 @@ use Illuminate\Support\Str;
 use App\Mail\resetPassword;
 use App\Models\User;
 use Validator;
-use Firebase\JWT\JWT;
+use Firebase\JWT\JWT; 
+Use Carbon\Carbon;
 
 class AuthController extends Controller
 {
@@ -92,9 +93,9 @@ class AuthController extends Controller
           'id' => $user->id,
           'username' => $user->username,
           'role' => $user->role
-        ], 
-        'iat' => intval(microtime(true)), 
-        'exp' => intval(microtime(true)) + (60 * 60 * 1000)
+        ],  
+        'iat' => intval((time()*1000)), 
+        'exp' => intval((time()*1000) + (60 * 60 * 3000))
       ];
 
       $token = JWT::encode($payload, env('JWT_SECRET'), 'HS256');
@@ -210,11 +211,21 @@ class AuthController extends Controller
     ], 404);
   }
 
-  public function logout()
+  public function logout(Request $request)
   {
-    return response()->json([
-      'success'=> true,
-      'message'=> 'Logout...' 
-    ], 200); ;
+    try {
+      return response()->json([
+        'success'=> true,
+        'message'=> 'You are succesfully logged out.', 
+      ], 200); ;
+
+    } catch (JWTException $e) {
+        return response()->json([
+          'success' => false,
+          'error' => 'An Error has been occured.'
+        ], 500);
+    }
+ 
+
   }
 }
