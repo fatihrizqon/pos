@@ -25,5 +25,6 @@ class AppServiceProvider extends ServiceProvider
                     ->header('Access-Control-Allow-Headers', 'Content-Type, Origin');                    
             });
         }
+ 
     }
 }

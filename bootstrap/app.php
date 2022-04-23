@@ -6,7 +6,7 @@ require_once __DIR__.'/../vendor/autoload.php';
     dirname(__DIR__)
 ))->bootstrap();
 
-date_default_timezone_set(env('APP_TIMEZONE', 'UTC'));
+// date_default_timezone_set(env('APP_TIMEZONE', 'UTC'));
 
 /*
 |--------------------------------------------------------------------------
@@ -24,8 +24,8 @@ $app = new Laravel\Lumen\Application(
 );
 
 $app->withFacades();
-
 $app->withEloquent();
+
 
 /*
 |--------------------------------------------------------------------------
@@ -59,7 +59,8 @@ $app->singleton(
 |
 */
 
-$app->configure('app');
+// $app->configure('app');
+$app->configure('auth');
 
 /*
 |--------------------------------------------------------------------------
@@ -83,6 +84,10 @@ $app->configure('app');
 $app->middleware([
     App\Http\Middleware\CorsMiddleware::class
 ]);
+$app->routeMiddleware([
+    'jwt.auth' => App\Http\Middleware\JwtMiddleware::class,
+]);
+
 /*
 |--------------------------------------------------------------------------
 | Register Service Providers
@@ -94,10 +99,12 @@ $app->middleware([
 |
 */
 
-// $app->register(App\Providers\AppServiceProvider::class);
+$app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\CatchAllOptionsRequestsProvider::class);
-// $app->register(App\Providers\AuthServiceProvider::class);
+$app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
+$app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class); // Register Lumen Generator
+
 
 /*
 |--------------------------------------------------------------------------
@@ -116,10 +123,6 @@ $app->router->group([
     require __DIR__.'/../routes/web.php';
 });
 
-/*
- Lumen Generator
-*/
-$app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
 
 
 return $app;

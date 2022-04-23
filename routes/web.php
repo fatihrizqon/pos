@@ -1,10 +1,19 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+ 
 $router->get('/', 'AppController@index');
 
 $router->group(['prefix' => 'api'], function () use ($router) {
+    
+    $router->post('/auth/register', 'AuthController@register');
+    $router->post('/auth/login', 'AuthController@login');
+
+    // Authorized Routes
+    $router->group(['middleware' => 'auth'], function () use($router){
+        $router->get('/profile', 'AuthController@profile');
+    });
+
     $router->get('/categories', 'ProductCategoryController@index');
     $router->post('/category/create', 'ProductCategoryController@create');
     $router->get('/category/view/{id}', 'ProductCategoryController@view');
