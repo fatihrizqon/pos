@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
  
 use App\Models\ProductCategory;
 use Illuminate\Http\Request;
+use Validator;
 
 class ProductCategoryController extends Controller
 {
@@ -27,9 +28,21 @@ class ProductCategoryController extends Controller
 
     public function create(Request $request)
     {
+        $validator = Validator::make($request->all(),[ 
+            'name' => ['required', 'string'],
+        ]);
+      
+        if($validator->fails()) {
+            $error = $validator->errors()->first();
+            return response()->json([
+                'success' => false,
+                'message' => $error
+            ], 403);
+        }
+
         try{
             $product_category = new ProductCategory();
-            $product_category->name = $request->name;
+            $product_category->name = ucwords(strtolower($request->name));
             if($product_category->save()){ 
                 return response()->json([
                     'success' => true,
@@ -59,6 +72,7 @@ class ProductCategoryController extends Controller
                 'data'    => $product_category
             ], 200);
         }
+        
         return response()->json([
             'success' => false,
             'message' => "Failed to get selected Category." 
@@ -67,20 +81,38 @@ class ProductCategoryController extends Controller
 
     public function update(Request $request, $id)
     {
-        $product_category = ProductCategory::find($id);
-        $product_category->name = $request->name;
-
-        if($product_category->save()){
+        $validator = Validator::make($request->all(),[ 
+            'name' => ['required', 'string'],
+        ]);
+      
+        if($validator->fails()) {
+            $error = $validator->errors()->first();
             return response()->json([
-                'success' => true,
-                'message' => "Selected Category has been updated.",
-                'data'    => $product_category
-            ], 200);
+                'success' => false,
+                'message' => $error
+            ], 403);
         }
-        return response()->json([
-            'success' => false,
-            'message' => "Failed to update selected Category." 
-        ], 404);
+        try {
+            $product_category = ProductCategory::find($id);
+            $product_category->name = ucwords(strtolower($request->name));
+    
+            if($product_category->save()){
+                return response()->json([
+                    'success' => true,
+                    'message' => "Selected Category has been updated.",
+                    'data'    => $product_category
+                ], 200);
+            }
+            return response()->json([
+                'success' => false,
+                'message' => "Failed to update selected Category." 
+            ], 404);
+        } catch(\Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => $e
+            ], 403);
+        }
     }
 
     public function delete($id)

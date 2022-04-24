@@ -61,29 +61,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('/cashflows', 'CashflowController@index');
     $router->post('/cashflow/create', 'CashflowController@create');
     $router->get('/cashflow/view/{id}', 'CashflowController@view');
-    // $router->put('/cashflow/update/{id}', 'CashflowController@update');
-    // $router->delete('/cashflow/delete/{id}', 'CashflowController@delete');
+    $router->put('/cashflow/update/{id}', 'CashflowController@update');
+    $router->delete('/cashflow/delete/{id}', 'CashflowController@delete');
 
 });
-
-/*
-    -> Setiap Transaction & Supply Baru, masuk ke notifikasi email manajer.
-    -> Ketika ada Stock Product 0, masuk ke notifikasi email manajer.
-    *Bisa mute.
-*/
-
-/*
-    Algoritma penjualan:
-    1. Create a New Transaction (ID).
-    2. Create a New Transaction, 1 Transaction many Orders.
-    3. 
-    ------------------------------------------------------------------
-    1. Klik New Order.
-    2. Insert Product & Quantity => New Order
-    3. Klik Check Out => Mengumpulkan semua order jadi 1, menghitung total_price
-    4. Klik Pay => New Transaction
-*/
-
-/*
-
-*/

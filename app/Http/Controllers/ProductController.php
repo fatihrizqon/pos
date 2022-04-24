@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Faker\Factory as Faker; 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Validator;
+
 
 class ProductController extends Controller
 {
@@ -50,11 +52,26 @@ class ProductController extends Controller
 
     public function create(Request $request)
     {
+        $validator = Validator::make($request->all(),[ 
+            'name'        => ['required', 'string'], 
+            'purchase'    => ['required', 'integer'],
+            'sell'        => ['required', 'integer'], 
+            'category_id' => ['required', 'integer']
+        ]);
+      
+        if($validator->fails()) {
+            $error = $validator->errors()->first();
+            return response()->json([
+                'success' => false,
+                'message' => $error
+            ], 403);
+        }
+
         $faker = Faker::create('id_ID');
 
         try{
             $product = new Product(); 
-            $product->name = $request->name;
+            $product->name = ucwords(strtolower($request->name));
             $product->code = $faker->regexify('[A-Z]{5}[0-4]{3}');
             $product->purchase = $request->purchase;
             $product->sell = $request->sell;
@@ -98,23 +115,45 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
-        $product = product::find($id); 
-        $product->name = $request->name;
-        $product->purchase = $request->purchase;
-        $product->sell = $request->sell;
-        $product->category_id = $request->category_id;
-
-        if($product->save()){
+        $validator = Validator::make($request->all(),[ 
+            'name'        => ['required', 'string'], 
+            'purchase'    => ['required', 'integer'],
+            'sell'        => ['required', 'integer'], 
+            'category_id' => ['required', 'integer']
+        ]);
+      
+        if($validator->fails()) {
+            $error = $validator->errors()->first();
             return response()->json([
-                'success' => true,
-                'message' => "Selected Product has been updated.",
-                'data'    => $product
-            ], 200);
+                'success' => false,
+                'message' => $error
+            ], 403);
         }
-        return response()->json([
-            'success' => false,
-            'message' => "Failed to update selected Product." 
-        ], 404);
+        
+        try {
+            $product = product::find($id); 
+            $product->name = ucwords(strtolower($request->name));
+            $product->purchase = $request->purchase;
+            $product->sell = $request->sell;
+            $product->category_id = $request->category_id;
+    
+            if($product->save()){
+                return response()->json([
+                    'success' => true,
+                    'message' => "Selected Product has been updated.",
+                    'data'    => $product
+                ], 200);
+            }
+            return response()->json([
+                'success' => false,
+                'message' => "Failed to update selected Product." 
+            ], 404);
+        } catch(\Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => $e
+            ], 403);
+        }
     }
 
     public function delete($id)

@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('name', 50);
             $table->string('username', 25)->unique();
-            $table->boolean('gender')->nullable();
-            $table->string('email', 50)->unique();
+            $table->string('email', 30)->unique();
+            $table->string('gender', 6);
             $table->string('password');
             $table->string('phone', 15)->nullable()->unique();
             $table->string('role',10)->default(0);

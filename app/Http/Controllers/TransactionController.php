@@ -6,12 +6,16 @@ use App\Models\Order;
 use App\Models\Cashflow;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Validator;
 
 class TransactionController extends Controller
 {
     public function index()
     {
-        $transactions = Transaction::get();
+        $transactions = Transaction::join('users', 'users.id', '=', 'user_id')
+                                    ->select('transactions.*', 'users.name as cashier')
+                                    ->get();
+        // $transactions = Transaction::get();
         if($transactions){ 
             return response()->json([
                 'success' => true,
@@ -28,6 +32,22 @@ class TransactionController extends Controller
 
     public function create(Request $request)
     {
+        $validator = Validator::make($request->all(),[
+          'code'    => ['required', 'string'],
+          'revenue' => ['required', 'integer'],
+          'pay'     => ['required', 'integer'],
+          'return'  => ['required', 'integer'], 
+          'user_id' => ['required','integer']
+        ]);
+    
+        if($validator->fails()) {
+          $error = $validator->errors()->first();
+          return response()->json([
+            'success' => false,
+            'message' => $error
+          ], 403);
+        }
+
         try{
             $transaction = new Transaction();
             $transaction->order_code = $request->code;
@@ -86,8 +106,8 @@ class TransactionController extends Controller
 
     public function update(Request $request, $id)
     {
-        $transaction = Transaction::find($id);
-        $transaction->quantity = $request->quantity;
+        // $transaction = Transaction::find($id);
+        $transaction = false;
 
         if($transaction->save()){
             return response()->json([
@@ -104,7 +124,8 @@ class TransactionController extends Controller
 
     public function delete($id)
     {
-        $transaction = Transaction::find($id)->delete();
+        // $transaction = Transaction::find($id)->delete();
+        $transaction = false;
 
         if($transaction){
             return response()->json([

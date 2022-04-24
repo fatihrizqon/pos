@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order; 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Validator;
 
 class OrderController extends Controller
 {
@@ -27,6 +28,21 @@ class OrderController extends Controller
 
     public function create(Request $request)
     {
+        $validator = Validator::make($request->all(),[ 
+            'product_name' => ['required', 'string'],
+            'quantity'     => ['required', 'integer'],
+            'price'        => ['required', 'integer'],
+            'code'         => ['required', 'string'],
+        ]);
+      
+        if($validator->fails()) {
+            $error = $validator->errors()->first();
+            return response()->json([
+                'success' => false,
+                'message' => $error
+            ], 403);
+        }
+        
         try{
             $product = Product::where('code', $request->product_code)->get()->first();
             $order = new Order();
@@ -41,7 +57,7 @@ class OrderController extends Controller
                     'message' => "Insuficcient Stocks."
                 ], 403);
             }else{
-                $product->stocks = $product->stocks - $order->quantity;
+                $product->stocks -= $order->quantity;
                 if($order->save() && $product->save()){ 
                     return response()->json([
                         'success' => true,
@@ -80,8 +96,8 @@ class OrderController extends Controller
 
     public function update(Request $request, $id)
     {
-        /* Can't update order */ 
-        $order = Order::find($id); 
+        // $order = Order::find($id);
+        $order = false;
 
         if($order->save()){
             return response()->json([
@@ -98,8 +114,8 @@ class OrderController extends Controller
 
     public function delete($id)
     {
-        $order = Order::find($id)->delete();
-        /* Can't delete order */ 
+        // $order = Order::find($id)->delete();
+        $order = false;
 
         if($order){
             return response()->json([
@@ -109,8 +125,7 @@ class OrderController extends Controller
         }
         return response()->json([
             'success' => false,
-            'message' => "Failed to delete selected Order.",
-            'data'    => ''
+            'message' => "Failed to delete selected Order.", 
         ], 404);
     }
 }

@@ -16,59 +16,56 @@ class AuthController extends Controller
   public function __construct(){}
 
   public function register(Request $request)
-  {  
-
-    /*
-      {
-        "name": "Misha Anastashya",
-        "username": "misha",
-        "gender": 1,
-        "email": "misha@mail.id",
-        "password": "misha123", 
-      }
-    */
-
+  {
     $validator = Validator::make($request->all(),[
       'name'       => ['required', 'string', 'max:50'],
-      'username'   => ['required', 'string', 'max:50', 'unique:users'],
-      'email'      => ['required', 'string', 'email', 'max:50', 'unique:users'], 
+      'username'   => ['required', 'string', 'max:25', 'unique:users'],
+      'gender'     => ['required', 'string', 'max:6'],
+      'email'      => ['required', 'string', 'email', 'max:30', 'unique:users'], 
       'password'   => ['required','string', 'min:6']
     ]);
 
     if($validator->fails()) {
       $error = $validator->errors()->first();
       return response()->json([
-        'success'   => false,
-        'message'   => $error 
+        'success' => false,
+        'message' => $error
       ], 403);
     }
 
-    $user = User::create([
-     'name'               => $request->input('name'),
-     'username'           => $request->input('username'), 
-     'gender'             => $request->input('gender'),
-     'email'              => $request->input('email'),
-     'password'           => Hash::make($request->input('password')), 
-     'verification_token' => Str::random(20),
-    ]);
-
-    if($user){
-      // Sending Email Verification
-      // Mail::to($user['email'])
-      // ->send(new userRegistered($user)
-      // );
-
+    try {
+      $user = User::create([
+        'name'               => ucwords(strtolower($request->name)),
+        'username'           => strtolower($request->username), 
+        'email'              => strtolower($request->email),
+        'gender'             => strtolower($request->gender),
+        'password'           => Hash::make($request->password), 
+        'verification_token' => Str::random(20),
+       ]);
+   
+       if($user){
+         // Sending Email Verification
+         // Mail::to($user['email'])
+         // ->send(new userRegistered($user)
+         // );
+   
+         return response()->json([
+           'success'   => true,
+           'message'   => 'You are registered!',
+           'data'      => $user
+         ], 200);
+       }
+   
+       return response()->json([
+         'success' => false,
+         'message' => "An error has been occured.",
+       ], 404);  
+    } catch(\Exception $e){
       return response()->json([
-        'success'   => true,
-        'message'   => 'You are registered!',
-        'data'      => $user
-      ], 200);
+          'success' => false,
+          'message' => $e
+      ], 403);
     }
-
-    return response()->json([
-      'success' => false,
-      'message' => "An error has been occured.",
-    ], 404);  
   }
  
   public function login(Request $request)
@@ -95,7 +92,7 @@ class AuthController extends Controller
           'role' => $user->role
         ],  
         'iat' => intval((time()*1000)), 
-        'exp' => intval((time()*1000) + (60 * 60 * 3000))
+        'exp' => intval((time()*1000) + (60 * 60 * 1000))
       ];
 
       $token = JWT::encode($payload, env('JWT_SECRET'), 'HS256');

@@ -6,6 +6,7 @@ use App\Models\Supply;
 use App\Models\Product;
 use App\Models\Cashflow;
 use Illuminate\Http\Request;
+use Validator;
 
 class SupplyController extends Controller
 {
@@ -33,6 +34,20 @@ class SupplyController extends Controller
 
     public function create(Request $request)
     {
+        $validator = Validator::make($request->all(),[
+          'product_id'    => ['required', 'integer'],
+          'quantity' => ['required', 'integer'], 
+          'supplier_id'  => ['required', 'integer']
+        ]);
+    
+        if($validator->fails()) {
+          $error = $validator->errors()->first();
+          return response()->json([
+            'success' => false,
+            'message' => $error
+          ], 403);
+        }
+
         try{
             $supply = new Supply();
             $product = Product::where('id', $request->product_id)->get()->first();
@@ -97,34 +112,54 @@ class SupplyController extends Controller
 
     public function update(Request $request, $id)
     {
-        $supply = Supply::find($id);
-        $product = Product::where('id', $supply->product_id)->get()->first();
-        $cashflow = Cashflow::where([
-            ['user_id', '=', $supply->user_id],
-            ['created_at', '=', $supply->created_at],
-        ])->get()->first();
-        $cashflow->balance += $supply->cost; /*normalize previous balance*/
-        $supply->product_id = $request->product_id;;
-        $oldstock = $product->stocks - $supply->quantity; /*normalize previous stock*/
-        $newstock = $oldstock + $request->quantity; /*counting updated stock*/
-        $supply->quantity = $request->quantity; /*getting new quantity*/
-        $supply->cost = $supply->quantity * $product->purchase; /*generating updated cost*/
-        $supply->supplier_id = $request->supplier_id;
-        $product->stocks = $newstock; /*updating stock at product*/
-        $cashflow->credit = $supply->cost; /*generating updated credit*/
-        $cashflow->balance = $cashflow->balance - $cashflow->credit; /*generating updated balance*/
-        $cashflow->notes = 'Purchasing '.$supply->quantity.' item(s) '.$product->name;
-        if($supply->save() && $product->save() && $cashflow->save()){
-            return response()->json([
-                'success' => true,
-                'message' => "Selected Supply has been updated.",
-                'data'    => $supply
-            ], 200);
-        } 
-        return response()->json([
+        $validator = Validator::make($request->all(),[ 
+          'quantity' => ['required', 'integer'], 
+          'supplier_id'  => ['required', 'integer']
+        ]);
+    
+        if($validator->fails()) {
+          $error = $validator->errors()->first();
+          return response()->json([
             'success' => false,
-            'message' => "Failed to update selected Supply."
-        ], 404);
+            'message' => $error
+          ], 403);
+        }
+
+        try {
+            $supply = Supply::find($id);
+            $product = Product::where('id', $supply->product_id)->get()->first();
+            $cashflow = Cashflow::where([
+                ['user_id', '=', $supply->user_id],
+                ['created_at', '=', $supply->created_at],
+            ])->get()->first();
+            $cashflow->balance += $supply->cost; /*normalize previous balance*/
+            $supply->product_id = $request->product_id;;
+            $oldstock = $product->stocks - $supply->quantity; /*normalize previous stock*/
+            $newstock = $oldstock + $request->quantity; /*counting updated stock*/
+            $supply->quantity = $request->quantity; /*getting new quantity*/
+            $supply->cost = $supply->quantity * $product->purchase; /*generating updated cost*/
+            $supply->supplier_id = $request->supplier_id;
+            $product->stocks = $newstock; /*updating stock at product*/
+            $cashflow->credit = $supply->cost; /*generating updated credit*/
+            $cashflow->balance = $cashflow->balance - $cashflow->credit; /*generating updated balance*/
+            $cashflow->notes = 'Purchasing '.$supply->quantity.' item(s) '.$product->name;
+            if($supply->save() && $product->save() && $cashflow->save()){
+                return response()->json([
+                    'success' => true,
+                    'message' => "Selected Supply has been updated.",
+                    'data'    => $supply
+                ], 200);
+            } 
+            return response()->json([
+                'success' => false,
+                'message' => "Failed to update selected Supply."
+            ], 404);
+        } catch(\Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => $e
+            ], 403);
+        }
     }
 
     public function delete($id)
