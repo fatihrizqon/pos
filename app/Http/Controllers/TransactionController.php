@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
  
 use App\Models\Order;
+use App\Models\Cashflow;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 
@@ -30,12 +31,25 @@ class TransactionController extends Controller
         try{
             $transaction = new Transaction();
             $transaction->order_code = $request->code;
-            $transaction->total_price = $request->total_price;
+            $transaction->revenue = $request->revenue;
             $transaction->pay = $request->pay;
             $transaction->return = $request->return;
             $transaction->user_id = $request->user_id;
+            
+            $orders = Order::where('code', '=', $request->code)->count();
+            $current = Cashflow::latest()->get()->pluck('balance')->first();
+            if(!$current){
+                $current = 0;
+            }
+            $cashflow = new Cashflow();
+            $cashflow->operation = 'Transaction ' . $transaction->order_code;
+            $cashflow->debit = $transaction->revenue;
+            $cashflow->credit = 0;
+            $cashflow->balance = $current + $cashflow->debit;
+            $cashflow->user_id = $transaction->user_id;
+            $cashflow->notes = 'Transaction '.$transaction->order_code.' with '.$orders.' products.';
 
-            if($transaction->save()){ 
+            if($transaction->save() && $cashflow->save()){
                 return response()->json([
                     'success' => true,
                     'message' => "A New Transaction has been created.",
@@ -66,8 +80,7 @@ class TransactionController extends Controller
         }
         return response()->json([
             'success' => false,
-            'message' => "Failed to get selected Transaction.",
-            'data'    => ''
+            'message' => "Failed to get selected Transaction." 
         ], 404);
     }
 

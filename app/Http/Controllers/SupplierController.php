@@ -20,8 +20,7 @@ class SupplierController extends Controller
         }
         return response()->json([
             'success' => false,
-            'message' => "Failed to load the Suppliers.",
-            'data'    => ''
+            'message' => "Failed to load the Suppliers." 
         ], 404);
     }
 

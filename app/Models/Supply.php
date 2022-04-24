@@ -12,7 +12,7 @@ class Supply extends Model
     use HasFactory;
 
     protected $fillable = [
-      'stock_id','quantity','user_id','supplier_id'
+      'stock_id','quantity','cost','user_id','supplier_id'
     ];
 
     public function user()

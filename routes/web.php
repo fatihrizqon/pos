@@ -58,6 +58,12 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->put('/supplier/update/{id}', 'SupplierController@update');
     $router->delete('/supplier/delete/{id}', 'SupplierController@delete');
 
+    $router->get('/cashflows', 'CashflowController@index');
+    $router->post('/cashflow/create', 'CashflowController@create');
+    $router->get('/cashflow/view/{id}', 'CashflowController@view');
+    // $router->put('/cashflow/update/{id}', 'CashflowController@update');
+    // $router->delete('/cashflow/delete/{id}', 'CashflowController@delete');
+
 });
 
 /*

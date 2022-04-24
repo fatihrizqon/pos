@@ -92,8 +92,7 @@ class ProductController extends Controller
         }
         return response()->json([
             'success' => false,
-            'message' => "Failed to get selected Product.",
-            'data'    => ''
+            'message' => "Failed to get selected Product." 
         ], 404);
     }
 
