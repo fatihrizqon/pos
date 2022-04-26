@@ -15,8 +15,8 @@ class SupplyFactory extends Factory
     {
     	return [
             'product_id' => Product::inRandomOrder()->first()->id,
-            'quantity' => $this->faker->numberBetween(5, 25),
-            'user_id' => $this->faker->numberBetween(1,9),
+            'quantity' => $this->faker->numberBetween(5, 50),
+            'user_id' => 1,
             'supplier_id' => Supplier::inRandomOrder()->first()->id,
     	];
     }

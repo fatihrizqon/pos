@@ -13,9 +13,9 @@ class TransactionController extends Controller
     public function index()
     {
         $transactions = Transaction::join('users', 'users.id', '=', 'user_id')
+                                    ->join('orders', 'orders.code', '=', 'order_code')->distinct()
                                     ->select('transactions.*', 'users.name as cashier')
-                                    ->get();
-        // $transactions = Transaction::get();
+                                    ->orderBy('created_at', 'DESC')->get();
         if($transactions){ 
             return response()->json([
                 'success' => true,
@@ -29,6 +29,7 @@ class TransactionController extends Controller
             'data'    => ''
         ], 404);
     }
+    
 
     public function create(Request $request)
     {

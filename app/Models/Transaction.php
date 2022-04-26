@@ -12,7 +12,7 @@ class Transaction extends Model
     use HasFactory;
     
     protected $fillable = [
-      'order_id','revenue','user_id'
+      'order_code','revenue','user_id'
     ];
 
     public function order_codes()

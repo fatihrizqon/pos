@@ -11,7 +11,7 @@ class OrderController extends Controller
 {
     public function index()
     {
-        $orders = Order::get();
+        $orders = Order::orderBy('created_at', 'DESC')->get();
         if($orders){
             return response()->json([
                 'success' => true,

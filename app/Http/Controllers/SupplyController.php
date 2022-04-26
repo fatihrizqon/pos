@@ -15,8 +15,8 @@ class SupplyController extends Controller
         $supplies = Supply::join('products','supplies.product_id','=','products.id') 
                             ->join('suppliers','supplies.supplier_id','=','suppliers.id')
                             ->join('users','supplies.user_id','=','users.id')
-                            ->select('supplies.id', 'products.id as product_id', 'products.name as product', 'products.purchase as purchase', 'supplies.quantity as quantity', 'supplies.cost as cost', 'users.name as stocker', 'suppliers.id as supplier_id', 'suppliers.name as supplier', 'supplies.created_at as date', 'supplies.updated_at as update')
-                            ->get();
+                            ->select('supplies.id', 'products.id as product_id', 'products.name as product', 'products.purchase as purchase', 'supplies.quantity as quantity', 'supplies.cost as cost', 'users.name as stocker', 'suppliers.id as supplier_id', 'suppliers.name as supplier', 'supplies.created_at as created_at', 'supplies.updated_at as updated_at')
+                            ->orderBy('created_at', 'DESC')->get();
 
         if($supplies){
             return response()->json([

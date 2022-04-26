@@ -13,7 +13,7 @@ class CashflowController extends Controller
 
         $cashflows = Cashflow::join('users','cashflows.user_id','=','users.id')
                             ->select('cashflows.*', 'users.name as operator')
-                            ->get();
+                            ->orderBy('created_at', 'DESC')->get();
         if($cashflows){
             return response()->json([
                 'success' => true,
