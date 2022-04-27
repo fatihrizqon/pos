@@ -1,20 +1,25 @@
 <?php
 namespace App\Http\Controllers; 
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Hash;
+use Validator;
+use App\Models\User;
+use Firebase\JWT\Key;
+use Firebase\JWT\JWT; 
+use App\Mail\resetPassword;
+use Illuminate\Support\Str;
 use App\Mail\userRegistered;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use App\Mail\resetPassword;
-use App\Models\User;
-use Validator;
-use Firebase\JWT\JWT; 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 Use Carbon\Carbon;
 
 class AuthController extends Controller
 {
   public function __construct(){}
 
+  /*
+   * perbaiki JWT, karena ketika token diubah di localstorage bisa masuk restricted zone.
+   */
   public function register(Request $request)
   {
     $validator = Validator::make($request->all(),[
@@ -86,16 +91,18 @@ class AuthController extends Controller
     
     if(Hash::check($request->input('password'), $user->password)){
       $payload = [  
-        'uid' => [
-          'id' => $user->id,
-          'username' => $user->username,
-          'role' => $user->role
-        ],  
-        'iat' => intval((time()*1000)), 
-        'exp' => intval((time()*1000) + (60 * 60 * 1000))
+        'data'=> [
+                  'id' => $user->id,
+                  'name' => $user->name,
+                  'username' => $user->username,
+                  'role' => $user->role
+                 ],
+        'iat' => time(), 
+        'exp' => time() + 60 * 600 * 1000  
       ];
 
       $token = JWT::encode($payload, env('JWT_SECRET'), 'HS256');
+ 
       if($token){
         return response()->json([
           'success'=> true,
@@ -116,11 +123,13 @@ class AuthController extends Controller
 
   }
 
-  public function profile()
+  public function profile(Request $request)
   {
+    $user = $request->auth;
     return response()->json([
       'success'=> true,
-      'message'=> 'Profile...' 
+      'message'=> 'Profile...',
+      'data' => $user
     ], 200); 
   }
 

@@ -33,7 +33,8 @@ class CashflowController extends Controller
         $validator = Validator::make($request->all(),[
             'operation' => ['required','string'],
             'debit'     => ['required','integer'],
-            'credit'    => ['required','integer'], 
+            'credit'    => ['required','integer'],
+            'user_id'   => ['required','integer']
         ]);
       
         if($validator->fails()) {
@@ -58,8 +59,7 @@ class CashflowController extends Controller
             }else{
                 $cashflow->balance = $latest - $cashflow->credit;
             }
-            // $cashflow->user_id = $request->user_id;
-            $cashflow->user_id = 1;
+            $cashflow->user_id = $request->user_id;
             $cashflow->notes = $request->notes;
 
             if($cashflow->save()){ 

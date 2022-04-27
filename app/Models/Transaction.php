@@ -15,9 +15,9 @@ class Transaction extends Model
       'order_code','revenue','user_id'
     ];
 
-    public function order_codes()
+    public function orders()
     {
-      return $this->hasMany(Order::class, 'code');
+      return $this->hasMany(Order::class);
     }
 
     public function user()

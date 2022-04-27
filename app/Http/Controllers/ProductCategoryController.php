@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
  
 use App\Models\ProductCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Validator;
 
 class ProductCategoryController extends Controller
@@ -81,6 +82,8 @@ class ProductCategoryController extends Controller
 
     public function update(Request $request, $id)
     {
+        $product_category = ProductCategory::find($id);
+        
         $validator = Validator::make($request->all(),[ 
             'name' => ['required', 'string'],
         ]);

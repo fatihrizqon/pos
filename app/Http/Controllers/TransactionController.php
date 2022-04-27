@@ -7,6 +7,7 @@ use App\Models\Cashflow;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Validator;
+use Illuminate\Support\Carbon;
 
 class TransactionController extends Controller
 {
@@ -16,6 +17,25 @@ class TransactionController extends Controller
                                     ->join('orders', 'orders.code', '=', 'order_code')->distinct()
                                     ->select('transactions.*', 'users.name as cashier')
                                     ->orderBy('created_at', 'DESC')->get();
+        if($transactions){ 
+            return response()->json([
+                'success' => true,
+                'message' => "All Transactions has been loaded.",
+                'data'    => $transactions
+            ], 200);
+        }
+        return response()->json([
+            'success' => false,
+            'message' => "Failed to load the Transactions.",
+            'data'    => ''
+        ], 404);
+    }
+
+    public function transactions( )
+    {
+        // perbaiki query menjadi data per hari selama 30 hari
+        $transactions = Transaction::where('created_at', '>', Carbon::now()->subDays(30)->endOfDay())->get();
+ 
         if($transactions){ 
             return response()->json([
                 'success' => true,

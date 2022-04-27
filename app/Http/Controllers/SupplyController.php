@@ -37,7 +37,8 @@ class SupplyController extends Controller
         $validator = Validator::make($request->all(),[
           'product_id'    => ['required', 'integer'],
           'quantity' => ['required', 'integer'], 
-          'supplier_id'  => ['required', 'integer']
+          'supplier_id'  => ['required', 'integer'],
+          'user_id'  => ['required', 'integer']
         ]);
     
         if($validator->fails()) {
@@ -57,15 +58,14 @@ class SupplyController extends Controller
             $supply->quantity = $request->quantity;
             $supply->cost = $request->quantity * $product->purchase;
             $supply->supplier_id = $request->supplier_id;
-
-            // $supply->user_id = $request->user_id; //change this soon...
-            $supply->user_id = 1;
-
+            $supply->user_id = $request->user_id;  
+ 
             $product->stocks += $request->quantity;
 
             if(!$current){
                 $current = 0;
             }
+
             $cashflow = new Cashflow();
             $cashflow->operation = 'Purchasing '.$product->name;
             $cashflow->debit = 0;
