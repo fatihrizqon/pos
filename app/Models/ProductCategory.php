@@ -13,6 +13,11 @@ class ProductCategory extends Model
     protected $fillable = [
       'name'
     ];
+
+    protected $casts = [
+      'created_at' => 'datetime', // Change your format
+      'updated_at' => 'datetime',
+    ];
     
     public function products()
     {

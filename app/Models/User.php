@@ -25,9 +25,11 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     ];
   
     protected $casts = [
+        'created_at' => 'datetime', // Change your format
+        'updated_at' => 'datetime',
         'email_verified_at' => 'datetime',
     ];
-
+    
     public function supplies()
     {
       return $this->hasMany(Supply::class);

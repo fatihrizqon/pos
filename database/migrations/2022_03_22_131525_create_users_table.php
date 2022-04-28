@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('gender', 6)->nullable();
             $table->string('password');
             $table->string('phone', 15)->nullable()->unique();
-            $table->integer('role',2)->default(0);
+            $table->integer('role')->default(0);
             $table->string('verification_token')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamps();

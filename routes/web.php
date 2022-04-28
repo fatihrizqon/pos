@@ -16,6 +16,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
         $router->get('/categories', 'ProductCategoryController@index');
         $router->post('/category/create', 'ProductCategoryController@create');
+        $router->post('/category/import', 'ProductCategoryController@import');
         $router->get('/category/view/{id}', 'ProductCategoryController@view');
         $router->put('/category/update/{id}', 'ProductCategoryController@update');
         $router->delete('/category/delete/{id}', 'ProductCategoryController@delete');
@@ -23,15 +24,10 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/products', 'ProductController@index');
         $router->get('/allproducts', 'ProductController@allproducts');
         $router->post('/product/create', 'ProductController@create');
+        $router->post('/product/import', 'ProductController@import');
         $router->get('/product/view/{id}', 'ProductController@view');
         $router->put('/product/update/{id}', 'ProductController@update');
         $router->delete('/product/delete/{id}', 'ProductController@delete');
-
-        $router->get('/stocks', 'StockController@index');
-        $router->post('/stock/create', 'StockController@create');
-        $router->get('/stock/view/{id}', 'StockController@view');
-        $router->put('/stock/update/{id}', 'StockController@update');
-        $router->delete('/stock/delete/{id}', 'StockController@delete');
 
         $router->get('/orders', 'OrderController@index');
         $router->post('/order/create', 'OrderController@create');
@@ -54,6 +50,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
         $router->get('/suppliers', 'SupplierController@index');
         $router->post('/supplier/create', 'SupplierController@create');
+        $router->post('/supplier/import', 'SupplierController@import');
         $router->get('/supplier/view/{id}', 'SupplierController@view');
         $router->put('/supplier/update/{id}', 'SupplierController@update');
         $router->delete('/supplier/delete/{id}', 'SupplierController@delete');

@@ -15,6 +15,11 @@ class Product extends Model
       'name','code','purchase','sell','category_id'
     ];
 
+    protected $casts = [
+      'created_at' => 'datetime', // Change your format
+      'updated_at' => 'datetime',
+    ];
+
     public function order()
     {
       return $this->belongsTo(Order::class);

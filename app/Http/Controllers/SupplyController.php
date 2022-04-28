@@ -27,13 +27,17 @@ class SupplyController extends Controller
         }
         return response()->json([
             'success' => false,
-            'message' => "Failed to load the Supplies.",
-            'data'    => ''
+            'message' => "Failed to load the Supplies." 
         ], 404); 
     }
 
     public function create(Request $request)
     {
+        /**
+         * Penambahan Tabel Stocks untuk Supply
+         * Konsep mirip Transactions & Order
+         * Generate Stocks Code
+         */
         $validator = Validator::make($request->all(),[
           'product_id'    => ['required', 'integer'],
           'quantity' => ['required', 'integer'], 

@@ -25,6 +25,70 @@ class SupplierController extends Controller
         ], 404);
     }
 
+    public function import(Request $request)
+    {
+        $validator = Validator::make($request->all(),[ 
+            'suppliers' => ['required', 'string'] 
+        ]);
+    
+        if($validator->fails()) {
+          $error = $validator->errors()->first();
+          return response()->json([
+            'success' => false,
+            'message' => $error 
+          ], 403);
+        }
+        $data = json_decode($request->suppliers, true);
+        
+        if(!$data){
+            return response()->json([
+                'success' => false,
+                'message' => "Unable to Import an Empty Data." 
+            ], 400); 
+        }
+
+        try { 
+            if($this->rules($data)){
+                foreach ($data as $value) {
+                    Supplier::create(array(
+                      'name' => ucwords(strtolower($value['name'])), 
+                      'address' => ucwords(strtolower($value['address'])),    
+                      'email' => strtolower($value['email']),
+                      'contact' => $value['contact']
+                    ));
+                }
+                return response()->json([
+                    'success' => true,
+                    'message' => "Import Data Success.",
+                    'data'    => $data
+                ], 200);
+            }
+            return response()->json([
+                'success' => false,
+                'message' => "Incorrect Format File. Please kindly to use provided Import Format File." 
+            ], 400);  
+
+        } catch(\Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => $e
+            ], 403);
+        }
+    }
+
+    public function rules($data)
+    {
+        if( array_key_exists('name', $data[0]) &&
+            array_key_exists('address', $data[0]) &&
+            array_key_exists('email', $data[0]) &&
+            array_key_exists('contact', $data[0])
+            ){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public function create(Request $request)
     {
         $validator = Validator::make($request->all(),[ 

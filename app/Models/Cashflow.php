@@ -11,6 +11,11 @@ class Cashflow extends Model
       'operation','debet','credit','balance','user_id','notes'
     ];
 
+    protected $casts = [
+    'created_at' => 'datetime', // Change your format
+    'updated_at' => 'datetime',
+];
+
     public function user()
     {
       return $this->belongsTo(User::class, 'user_id');

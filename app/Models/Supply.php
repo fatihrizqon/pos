@@ -15,6 +15,11 @@ class Supply extends Model
       'product_id','quantity','cost','user_id','supplier_id'
     ];
 
+    protected $casts = [
+      'created_at' => 'datetime', // Change your format
+      'updated_at' => 'datetime',
+    ];
+
     public function user()
     {
       return $this->belongsTo(User::class);

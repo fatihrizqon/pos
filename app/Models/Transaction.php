@@ -15,6 +15,11 @@ class Transaction extends Model
       'order_code','revenue','user_id'
     ];
 
+    protected $casts = [
+      'created_at' => 'datetime', // Change your format
+      'updated_at' => 'datetime',
+    ];
+
     public function orders()
     {
       return $this->hasMany(Order::class);

@@ -99,6 +99,9 @@ class CashflowController extends Controller
 
     public function update(Request $request, $id)
     {
+        /**
+         * Error ketika update terhadap Balance. check lagi.
+         */
         
         $validator = Validator::make($request->all(),[
             'operation' => ['required','string'],

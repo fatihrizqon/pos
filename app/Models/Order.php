@@ -14,6 +14,11 @@ class Order extends Model
       'product_id','product_name','quantity','price','code' 
     ];
 
+    protected $casts = [
+      'created_at' => 'datetime', // Change your format
+      'updated_at' => 'datetime',
+    ];
+
     public function products()
     {
       return $this->hasMany(Product::class);

@@ -27,6 +27,66 @@ class ProductCategoryController extends Controller
         ], 404);
     }
 
+
+    public function import(Request $request)
+    {
+        $validator = Validator::make($request->all(),[ 
+            'product_categories' => ['required', 'string'] 
+        ]);
+    
+        if($validator->fails()) {
+          $error = $validator->errors()->first();
+          return response()->json([
+            'success' => false,
+            'message' => $error 
+          ], 403);
+        }
+        $data = json_decode($request->product_categories, true);
+        
+        if(!$data){
+            return response()->json([
+                'success' => false,
+                'message' => "Unable to Import an Empty Data." 
+            ], 400); 
+        }
+
+        try { 
+            if($this->rules($data)){
+                foreach ($data as $value) {
+                    ProductCategory::create(array(
+                        'name' => ucwords(strtolower($value['category_name'])), 
+                    ));
+                }
+                return response()->json([
+                    'success' => true,
+                    'message' => "Import Data Success.",
+                    'data'    => $data
+                ], 200);
+            }
+            return response()->json([
+                'success' => false,
+                'message' => "Incorrect Format File. Please kindly to use provided Import Format File." 
+            ], 400);  
+
+        } catch(\Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => $e
+            ], 403);
+        }
+    }
+
+    public function rules($data)
+    {
+        if( array_key_exists('category_name', $data[0])
+            ){
+            return true;
+        }else{
+            return false;
+        }
+    }    
+
+
     public function create(Request $request)
     {
         $validator = Validator::make($request->all(),[ 
