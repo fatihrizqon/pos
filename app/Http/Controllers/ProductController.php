@@ -119,18 +119,20 @@ class ProductController extends Controller
                 'message' => "Unable to Import an Empty Data." 
             ], 400); 
         }
+ 
 
         try { 
             if($this->rules($data)){
                 foreach ($data as $value) {
-                    Product::create(array(
-                      'name' => ucwords(strtolower($value['name'])), 
-                      'code' => $faker->regexify('[A-Z]{5}[0-4]{3}'),
-                      'purchase' => $value['purchase'],
-                      'sell' => $value['sell'],
-                      'stocks' => 0,
-                      'category_id' => $value['category_id']
-                    ));
+                    $product = new Product(); 
+                    $product->name = ucwords(strtolower($value['name']));
+                    $product->code = $faker->regexify('[A-Z]{5}[0-4]{3}'); 
+                    $product->code = $value['code']; 
+                    $product->purchase = $value['purchase'];
+                    $product->sell = $value['sell'];
+                    $product->stocks = 0;
+                    $product->category_id = $value['category_id'];
+                    $product->save();
                 }
                 return response()->json([
                     'success' => true,
@@ -153,7 +155,8 @@ class ProductController extends Controller
 
     public function rules($data)
     {
-        if( array_key_exists('name', $data[0]) &&
+        if( array_key_exists('name', $data[0]) && 
+            array_key_exists('code', $data[0]) &&
             array_key_exists('purchase', $data[0]) &&
             array_key_exists('sell', $data[0]) &&
             array_key_exists('category_id', $data[0])

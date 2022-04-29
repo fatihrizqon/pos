@@ -8,6 +8,7 @@ use App\Mail\resetPassword;
 use Illuminate\Support\Str;
 use App\Mail\userRegistered;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -135,9 +136,61 @@ class AuthController extends Controller
 
   public function update(Request $request)
   {
+    $user = User::find($request->auth->id);
+
+    if(!$user){
+        return response()->json([
+          'success' => false,
+          'message' => "User Not Found." 
+        ], 404);
+    }
+
+    $validator = Validator::make($request->all(),[
+      'name'       => ['string', 'max:50'],
+      'username'   => ['string', 'max:25', Rule::unique('users')->ignore($user->id)],
+      'gender'     => ['string', 'max:6'],
+      'email'      => ['string', 'email', 'max:30', Rule::unique('users')->ignore($user->id)], 
+      'password'   => ['string', 'min:6']
+    ]);
+
+    if($validator->fails()) {
+      $error = $validator->errors()->first();
+      return response()->json([
+        'success' => false,
+        'message' => $error
+      ], 403);
+    } 
+    
+    try { 
+      $user->name     = ucwords(strtolower($request->name));
+      $user->username = strtolower($request->username);
+      $user->email    = strtolower($request->email);
+      $user->gender   = strtolower($request->gender);
+      $user->password = Hash::make($request->password);
+      $user->phone    = $request->phone;
+
+      if($user->save()){
+          return response()->json([
+              'success' => true,
+              'message' => "Your profile has been updated.",
+              'data'    => $user
+          ], 200);
+      }
+      return response()->json([
+          'success' => false,
+          'message' => "Failed to update selected Category." 
+      ], 404);
+  } catch(\Exception $e){
+      return response()->json([
+          'success' => false,
+          'message' => $e
+      ], 403);
+  }
+
     return response()->json([
       'success'=> true,
-      'message'=> 'Update Profile...' 
+      'message'=> 'Update Profile...' ,
+      'data' => $user
     ], 200); 
   }
  

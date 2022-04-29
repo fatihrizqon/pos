@@ -32,8 +32,8 @@ class CashflowController extends Controller
     {
         $validator = Validator::make($request->all(),[
             'operation' => ['required','string'],
-            'debit'     => ['required','integer'],
-            'credit'    => ['required','integer'],
+            'debit'     => ['required','integer','min:0'],
+            'credit'    => ['required','integer','min:0'],
             'user_id'   => ['required','integer']
         ]);
       

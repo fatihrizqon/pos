@@ -13,6 +13,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     // Protected by JWT
     $router->group(['middleware' => 'jwt.auth'], function () use($router){
         $router->get('/profile', 'AuthController@profile');
+        $router->put('/profile/update', 'AuthController@update');
 
         $router->get('/categories', 'ProductCategoryController@index');
         $router->post('/category/create', 'ProductCategoryController@create');
