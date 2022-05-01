@@ -15,7 +15,7 @@ return new class extends Migration
     { 
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('order_code')->references('code')->on('orders')->onUpdate('cascade')->onDelete('cascade')->unique();
+            $table->string('order_code',100)->unique()->references('code')->on('orders')->onUpdate('cascade')->onDelete('cascade');
             $table->bigInteger('revenue');
             $table->bigInteger('pay');
             $table->bigInteger('return');
