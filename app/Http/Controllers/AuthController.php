@@ -17,10 +17,7 @@ Use Carbon\Carbon;
 class AuthController extends Controller
 {
   public function __construct(){}
-
-  /*
-   * perbaiki JWT, karena ketika token diubah di localstorage bisa masuk restricted zone.
-   */
+ 
   public function register(Request $request)
   {
     $validator = Validator::make($request->all(),[
@@ -99,7 +96,7 @@ class AuthController extends Controller
                   'role' => $user->role
                  ],
         'iat' => time(), 
-        'exp' => time() + 60 * 600 * 1000  
+        'exp' => time() + 60 * 120 * 1000  
       ];
 
       $token = JWT::encode($payload, env('JWT_SECRET'), 'HS256');
@@ -129,7 +126,7 @@ class AuthController extends Controller
     $user = $request->auth;
     return response()->json([
       'success'=> true,
-      'message'=> 'Profile...',
+      'message'=> 'User Profile succesfuly loaded.',
       'data' => $user
     ], 200); 
   }
@@ -180,12 +177,12 @@ class AuthController extends Controller
           'success' => false,
           'message' => "Failed to update selected Category." 
       ], 404);
-  } catch(\Exception $e){
-      return response()->json([
-          'success' => false,
-          'message' => $e
-      ], 403);
-  }
+    } catch(\Exception $e){
+        return response()->json([
+            'success' => false,
+            'message' => $e
+        ], 403);
+    }
 
     return response()->json([
       'success'=> true,

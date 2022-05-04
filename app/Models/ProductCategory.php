@@ -15,7 +15,7 @@ class ProductCategory extends Model
     ];
 
     protected $casts = [
-      'created_at' => 'datetime', // Change your format
+      'created_at' => 'datetime',
       'updated_at' => 'datetime',
     ];
     
