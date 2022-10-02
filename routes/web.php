@@ -10,7 +10,6 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->post('/auth/login', 'AuthController@login');
     $router->get('/auth/logout', 'AuthController@logout');
 
-    // Protected by JWT
     $router->group(['middleware' => 'jwt.auth'], function () use($router){
         $router->get('/profile', 'AuthController@profile');
         $router->put('/profile/update', 'AuthController@update');
