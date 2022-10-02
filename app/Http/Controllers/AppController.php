@@ -10,7 +10,7 @@ class AppController extends Controller
     {
         return response()->json([
             'success' => true,
-            'message' => "Index of App",
+            'message' => "Updated 02/10/2022",
             'date' => date('Y-m-d H:i:s')
         ], 200);
     }

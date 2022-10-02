@@ -131,7 +131,7 @@ class DatabaseSeeder extends Seeder
             ],
         ];
         for ($i=0; $i < count($users); $i++) { 
-            User::create($users[$i]);
+            // User::create($users[$i]);
         }
         for ($i=0; $i < count($categories); $i++) { 
             // ProductCategory::create($categories[$i]);
