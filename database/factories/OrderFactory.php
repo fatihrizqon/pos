@@ -14,12 +14,15 @@ class OrderFactory extends Factory
     public function definition(): array
     {
         $faker = Faker::create('id_ID');
-
+        $product = Product::inRandomOrder()->first();
     	return [
-            'product_id' => Product::inRandomOrder()->first()->id,
+            'product_id' => $product['id'],
+            'product_name' => $product['name'],
             'quantity' => $this->faker->numberBetween(5, 25),
             'price' => $this->faker->numberBetween(1, 9) * 10000,
             'code' => $faker->regexify('[A-Z]{7}[0-4]{3}'),
+            'created_at' => $this->faker->dateTimeBetween('-1 month', 'today'),
+            'updated_at' => $this->faker->dateTimeBetween('-1 month', 'today'),
     	];
     }
 }
